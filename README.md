@@ -11,3 +11,8 @@
     dotnet add package Microsoft.EntityFrameworkCore.Tools --version 8.0.1
     dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 8.0.1
 </pre>
+
+# Migração
+<pre>
+    dotnet ef migrations add ClienteAdd
+</pre>
