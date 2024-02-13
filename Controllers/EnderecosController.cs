@@ -10,24 +10,22 @@ using EntityFramework.Services.DataBase;
 
 namespace EntityFramework.Controllers
 {
-    public class ClientesController : Controller
+    public class EnderecosController : Controller
     {
         private readonly DbContexto _context;
 
-        public ClientesController(DbContexto context)
+        public EnderecosController(DbContexto context)
         {
             _context = context;
         }
 
-        // GET: Clientes
+        // GET: Enderecos
         public async Task<IActionResult> Index()
         {
-            var dbContexto = _context.Clientes.Include(c => c.Endereco);
-            var lista = await dbContexto.ToListAsync();
-            return View(lista);
+            return View(await _context.Enderecos.ToListAsync());
         }
 
-        // GET: Clientes/Details/5
+        // GET: Enderecos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -35,42 +33,39 @@ namespace EntityFramework.Controllers
                 return NotFound();
             }
 
-            var cliente = await _context.Clientes
-                .Include(c => c.Endereco)
+            var endereco = await _context.Enderecos
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (cliente == null)
+            if (endereco == null)
             {
                 return NotFound();
             }
 
-            return View(cliente);
+            return View(endereco);
         }
 
-        // GET: Clientes/Create
+        // GET: Enderecos/Create
         public IActionResult Create()
         {
-            ViewData["EnderecoId"] = new SelectList(_context.Enderecos, "Id", "Bairro");
             return View();
         }
 
-        // POST: Clientes/Create
+        // POST: Enderecos/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,EnderecoId")] Cliente cliente)
+        public async Task<IActionResult> Create([Bind("Id,Rua,Numero,Complemento,Bairro,Cidade,Estado,Pais,CEP")] Endereco endereco)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(cliente);
+                _context.Add(endereco);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EnderecoId"] = new SelectList(_context.Enderecos, "Id", "Bairro", cliente.EnderecoId);
-            return View(cliente);
+            return View(endereco);
         }
 
-        // GET: Clientes/Edit/5
+        // GET: Enderecos/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -78,23 +73,22 @@ namespace EntityFramework.Controllers
                 return NotFound();
             }
 
-            var cliente = await _context.Clientes.FindAsync(id);
-            if (cliente == null)
+            var endereco = await _context.Enderecos.FindAsync(id);
+            if (endereco == null)
             {
                 return NotFound();
             }
-            ViewData["EnderecoId"] = new SelectList(_context.Enderecos, "Id", "Bairro", cliente.EnderecoId);
-            return View(cliente);
+            return View(endereco);
         }
 
-        // POST: Clientes/Edit/5
+        // POST: Enderecos/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,EnderecoId")] Cliente cliente)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Rua,Numero,Complemento,Bairro,Cidade,Estado,Pais,CEP")] Endereco endereco)
         {
-            if (id != cliente.Id)
+            if (id != endereco.Id)
             {
                 return NotFound();
             }
@@ -103,12 +97,12 @@ namespace EntityFramework.Controllers
             {
                 try
                 {
-                    _context.Update(cliente);
+                    _context.Update(endereco);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ClienteExists(cliente.Id))
+                    if (!EnderecoExists(endereco.Id))
                     {
                         return NotFound();
                     }
@@ -119,11 +113,10 @@ namespace EntityFramework.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EnderecoId"] = new SelectList(_context.Enderecos, "Id", "Bairro", cliente.EnderecoId);
-            return View(cliente);
+            return View(endereco);
         }
 
-        // GET: Clientes/Delete/5
+        // GET: Enderecos/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -131,35 +124,34 @@ namespace EntityFramework.Controllers
                 return NotFound();
             }
 
-            var cliente = await _context.Clientes
-                .Include(c => c.Endereco)
+            var endereco = await _context.Enderecos
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (cliente == null)
+            if (endereco == null)
             {
                 return NotFound();
             }
 
-            return View(cliente);
+            return View(endereco);
         }
 
-        // POST: Clientes/Delete/5
+        // POST: Enderecos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var cliente = await _context.Clientes.FindAsync(id);
-            if (cliente != null)
+            var endereco = await _context.Enderecos.FindAsync(id);
+            if (endereco != null)
             {
-                _context.Clientes.Remove(cliente);
+                _context.Enderecos.Remove(endereco);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ClienteExists(int id)
+        private bool EnderecoExists(int id)
         {
-            return _context.Clientes.Any(e => e.Id == id);
+            return _context.Enderecos.Any(e => e.Id == id);
         }
     }
 }

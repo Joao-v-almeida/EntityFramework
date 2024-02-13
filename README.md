@@ -15,7 +15,11 @@
 
 # Migração
 <pre>
-    dotnet ef migrations add ClienteAdd
+    dotnet ef migrations add 'nome'
+</pre>
+
+<pre>
+    dotnet ef database update
 </pre>
 
 # Intalação do code generator
@@ -25,6 +29,13 @@
 
 # Scaffolding 
 <pre>
-    dotnet aspnet-codegenerator controller -name ClientesController -m Cliente -dc DbContexto --relativeFolderPath Controllers --useDefaultLayout
+    dotnet aspnet-codegenerator controller -name ClientesController -m EntityFramework.Models.Cliente -dc DbContexto --relativeFolderPath Controllers --useDefaultLayout
 
+    dotnet aspnet-codegenerator controller -name ProdutosController -m EntityFramework.Models.Produto -dc DbContexto --relativeFolderPath Controllers --useDefaultLayout
+
+    dotnet aspnet-codegenerator controller -name EnderecosController -m EntityFramework.Models.Endereco -dc DbContexto --relativeFolderPath Controllers --useDefaultLayout
+
+    dotnet aspnet-codegenerator controller -name PedidosController -m EntityFramework.Models.Pedido -dc DbContexto --relativeFolderPath Controllers --useDefaultLayout
+
+    dotnet aspnet-codegenerator controller -name PedidoProdutosController -m EntityFramework.Models.PedidoProdutos -dc DbContexto --relativeFolderPath Controllers --useDefaultLayout
 </pre>

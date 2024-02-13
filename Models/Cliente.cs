@@ -20,12 +20,11 @@ namespace EntityFramework.Models
         [Required]
         public string Nome { get; set; } = string.Empty;
 
-        [MaxLength(255)]
+        [Required]
         [Column("CLIENDERECO")]
-        public string? Endereco { get; set; }
+        public int EnderecoId { get; set; }
 
-        [MaxLength]
-        [Column("CLIOBSERVACAO")]
-        public string? Observacao { get; set; }
+        [ForeignKey("EnderecoId")]
+        public virtual Endereco? Endereco { get; set; }
     }
 }

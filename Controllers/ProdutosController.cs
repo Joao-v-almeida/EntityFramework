@@ -10,24 +10,22 @@ using EntityFramework.Services.DataBase;
 
 namespace EntityFramework.Controllers
 {
-    public class ClientesController : Controller
+    public class ProdutosController : Controller
     {
         private readonly DbContexto _context;
 
-        public ClientesController(DbContexto context)
+        public ProdutosController(DbContexto context)
         {
             _context = context;
         }
 
-        // GET: Clientes
+        // GET: Produtos
         public async Task<IActionResult> Index()
         {
-            var dbContexto = _context.Clientes.Include(c => c.Endereco);
-            var lista = await dbContexto.ToListAsync();
-            return View(lista);
+            return View(await _context.Produtos.ToListAsync());
         }
 
-        // GET: Clientes/Details/5
+        // GET: Produtos/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -35,42 +33,39 @@ namespace EntityFramework.Controllers
                 return NotFound();
             }
 
-            var cliente = await _context.Clientes
-                .Include(c => c.Endereco)
+            var produto = await _context.Produtos
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (cliente == null)
+            if (produto == null)
             {
                 return NotFound();
             }
 
-            return View(cliente);
+            return View(produto);
         }
 
-        // GET: Clientes/Create
+        // GET: Produtos/Create
         public IActionResult Create()
         {
-            ViewData["EnderecoId"] = new SelectList(_context.Enderecos, "Id", "Bairro");
             return View();
         }
 
-        // POST: Clientes/Create
+        // POST: Produtos/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,EnderecoId")] Cliente cliente)
+        public async Task<IActionResult> Create([Bind("Id,Nome,Valor,URLImagem,Descricao")] Produto produto)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(cliente);
+                _context.Add(produto);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EnderecoId"] = new SelectList(_context.Enderecos, "Id", "Bairro", cliente.EnderecoId);
-            return View(cliente);
+            return View(produto);
         }
 
-        // GET: Clientes/Edit/5
+        // GET: Produtos/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -78,23 +73,22 @@ namespace EntityFramework.Controllers
                 return NotFound();
             }
 
-            var cliente = await _context.Clientes.FindAsync(id);
-            if (cliente == null)
+            var produto = await _context.Produtos.FindAsync(id);
+            if (produto == null)
             {
                 return NotFound();
             }
-            ViewData["EnderecoId"] = new SelectList(_context.Enderecos, "Id", "Bairro", cliente.EnderecoId);
-            return View(cliente);
+            return View(produto);
         }
 
-        // POST: Clientes/Edit/5
+        // POST: Produtos/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,EnderecoId")] Cliente cliente)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Valor,URLImagem,Descricao")] Produto produto)
         {
-            if (id != cliente.Id)
+            if (id != produto.Id)
             {
                 return NotFound();
             }
@@ -103,12 +97,12 @@ namespace EntityFramework.Controllers
             {
                 try
                 {
-                    _context.Update(cliente);
+                    _context.Update(produto);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ClienteExists(cliente.Id))
+                    if (!ProdutoExists(produto.Id))
                     {
                         return NotFound();
                     }
@@ -119,11 +113,10 @@ namespace EntityFramework.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EnderecoId"] = new SelectList(_context.Enderecos, "Id", "Bairro", cliente.EnderecoId);
-            return View(cliente);
+            return View(produto);
         }
 
-        // GET: Clientes/Delete/5
+        // GET: Produtos/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -131,35 +124,34 @@ namespace EntityFramework.Controllers
                 return NotFound();
             }
 
-            var cliente = await _context.Clientes
-                .Include(c => c.Endereco)
+            var produto = await _context.Produtos
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (cliente == null)
+            if (produto == null)
             {
                 return NotFound();
             }
 
-            return View(cliente);
+            return View(produto);
         }
 
-        // POST: Clientes/Delete/5
+        // POST: Produtos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var cliente = await _context.Clientes.FindAsync(id);
-            if (cliente != null)
+            var produto = await _context.Produtos.FindAsync(id);
+            if (produto != null)
             {
-                _context.Clientes.Remove(cliente);
+                _context.Produtos.Remove(produto);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ClienteExists(int id)
+        private bool ProdutoExists(int id)
         {
-            return _context.Clientes.Any(e => e.Id == id);
+            return _context.Produtos.Any(e => e.Id == id);
         }
     }
 }
